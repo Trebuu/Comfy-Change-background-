@@ -55,6 +55,23 @@ themselves the first time the graph runs.
 4. **Generate:** open `https://<POD_ID>-8188.proxy.runpod.net`, load
    `workflows/change_background.json`, set your inputs, Run.
 
+## Local UI (`ui/app.py`)
+
+A tiny web app to drive the serverless endpoint without touching curl. It keeps your
+RunPod key **server-side** (never in the browser) and shows live progress.
+
+```bash
+pip install flask requests
+export RUNPOD_API_KEY=rpa_xxx                 # your RunPod key
+export RUNPOD_ENDPOINT_ID=rbar685y8idpqk      # the Change-background endpoint
+python ui/app.py                              # -> http://localhost:5000
+```
+
+Open the page, drop in **image 1 (person)** and **image 2 (scene)**, optionally edit the
+instruction, and click **Generate**. It uploads the images, runs the API-format workflow,
+polls until done, and shows/download the result. First run after idle takes a few minutes
+(cold model load); warm runs are faster.
+
 ## Note
 The RoleScene Blend LoRA (Chinese name `角色置景_RoleScene Blend`) is referenced inside
 the workflow as `RoleScene_Blend.safetensors` — renamed to plain ASCII to avoid
