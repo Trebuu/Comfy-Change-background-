@@ -10,6 +10,10 @@ https://github.com/cubiq/ComfyUI_essentials               | 9d9f4bedfc9f0321c19f
 https://github.com/lrzjason/Comfyui-QwenEditUtils         | cdd4d028c6491d27a40092d7795158668cec9189
 
 # --- required, clone latest (target ver in comment) ---
+# RES4LYF: provides the "beta57" scheduler used by the core KSampler in this workflow.
+# It registers the scheduler globally (no dedicated node), so it doesn't show up in a
+# node-type scan — but the workflow fails with "beta57 not available" without it.
+https://github.com/ClownsharkBatwing/RES4LYF               |   # beta57 scheduler
 https://github.com/TTPlanetPig/Comfyui_TTP_Toolset        |   # TTP_Image_Tile_Batch / Assy (built 1.0.5)
 https://github.com/numz/ComfyUI-SeedVR2_VideoUpscaler     |   # SeedVR2* upscaler (built 2.5.10)
 https://github.com/KookYn9404/KOOK_ImageCompression       |   # KOOK_ImageCompression
