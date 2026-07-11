@@ -25,6 +25,12 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 NODES_LIST="$HERE/custom_nodes.txt"
 MODELS_LIST="$HERE/models.txt"
 
+# When run standalone (e.g. Vast PROVISIONING_SCRIPT fetches only this file), the
+# manifests aren't alongside it — pull them from the repo so provisioning still works.
+RAW="https://raw.githubusercontent.com/Trebuu/Comfy-Change-background-/main/provisioning"
+[[ -f "$NODES_LIST"  ]] || { NODES_LIST=/tmp/_cn.txt;  curl -fsSL "$RAW/custom_nodes.txt" -o "$NODES_LIST"  || true; }
+[[ -f "$MODELS_LIST" ]] || { MODELS_LIST=/tmp/_mo.txt; curl -fsSL "$RAW/models.txt"        -o "$MODELS_LIST" || true; }
+
 # ---- locate ComfyUI ---------------------------------------------------------
 if [[ -z "${COMFYUI_DIR:-}" ]]; then
   for c in /ComfyUI /workspace/ComfyUI /opt/ComfyUI "$HOME/ComfyUI" ./ComfyUI; do
