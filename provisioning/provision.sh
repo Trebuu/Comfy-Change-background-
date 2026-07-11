@@ -47,6 +47,9 @@ echo ">> models root: $MODELS_ROOT"
 # pick a python
 PY="${PYTHON:-python3}"; command -v "$PY" >/dev/null || PY=python
 
+# safe whitespace trim (pure bash; unlike `xargs` it never chokes on quotes/apostrophes)
+trim() { local s="$1"; s="${s#"${s%%[![:space:]]*}"}"; s="${s%"${s##*[![:space:]]}"}"; printf '%s' "$s"; }
+
 # ensure downloaders
 command -v aria2c >/dev/null || { echo ">> installing aria2"; apt-get update -y && apt-get install -y aria2 || true; }
 $PY -m pip install -q --upgrade "huggingface_hub[hf_xet]" >/dev/null 2>&1 || $PY -m pip install -q --upgrade huggingface_hub || true
@@ -75,7 +78,7 @@ if [[ "${SKIP_NODES:-0}" != "1" && -f "$NODES_LIST" ]]; then
   echo ">> Installing custom nodes..."
   cd "$COMFYUI_DIR/custom_nodes"
   while IFS='|' read -r repo commit || [[ -n "$repo" ]]; do
-    repo="$(echo "$repo" | xargs)"; commit="$(echo "${commit:-}" | xargs)"
+    repo="$(trim "$repo")"; commit="$(trim "${commit:-}")"
     [[ -z "$repo" || "$repo" == \#* ]] && continue
     name="$(basename "$repo" .git)"
     if [[ -d "$name/.git" ]]; then
@@ -84,7 +87,7 @@ if [[ "${SKIP_NODES:-0}" != "1" && -f "$NODES_LIST" ]]; then
       echo "   [clone] $name"
       git clone --recurse-submodules "$repo" "$name" || { echo "   !! clone failed: $repo"; continue; }
     fi
-    if [[ -n "$commit" ]]; then git -C "$name" checkout -q "$commit" 2>/dev/null || echo "   !! pin failed $name@$commit"; fi
+    if [[ -n "$commit" && "$commit" != \#* ]]; then git -C "$name" checkout -q "$commit" 2>/dev/null || echo "   !! pin failed $name@$commit"; fi
     [[ -f "$name/requirements.txt" ]] && $PY -m pip install -q -r "$name/requirements.txt" || true
   done < "$NODES_LIST"
 fi
@@ -93,7 +96,7 @@ fi
 if [[ "${SKIP_MODELS:-0}" != "1" && -f "$MODELS_LIST" ]]; then
   echo ">> Downloading models..."
   while IFS='|' read -r url subdir fn || [[ -n "$url" ]]; do
-    url="$(echo "$url" | xargs)"; subdir="$(echo "${subdir:-}" | xargs)"; fn="$(echo "${fn:-}" | xargs)"
+    url="$(trim "$url")"; subdir="$(trim "${subdir:-}")"; fn="$(trim "${fn:-}")"
     [[ -z "$url" || "$url" == \#* ]] && continue
     [[ -z "$fn" ]] && fn="$(basename "${url%%\?*}")"
     dl "$url" "$MODELS_ROOT/$subdir" "$fn"
