@@ -1,0 +1,21 @@
+# Models for the Change-background workflow only.  ~52.5 GB total.
+# format:  <download-url> | <models-subfolder> | <save-as-filename>
+# All URLs verified reachable (HTTP 200). Set HF_TOKEN for faster pulls.
+
+# ---- core edit model (bf16) ~38 GB ----
+https://huggingface.co/Comfy-Org/Qwen-Image-Edit_ComfyUI/resolve/main/split_files/diffusion_models/qwen_image_edit_2509_bf16.safetensors | diffusion_models | qwen_image_edit_2509_bf16.safetensors
+
+# ---- text encoder (fp8) ----
+https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors | text_encoders | qwen_2.5_vl_7b_fp8_scaled.safetensors
+
+# ---- VAE ----
+https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/vae/qwen_image_vae.safetensors | vae | qwen_image_vae.safetensors
+
+# ---- LoRAs ----
+https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Edit-2509/Qwen-Image-Edit-2509-Lightning-8steps-V1.0-fp32.safetensors | loras | Qwen-Image-Edit-2509-Lightning-8steps-V1.0-fp32.safetensors
+# RoleScene Blend (角色置景) — renamed to ASCII in the workflow; byte-exact HF mirror
+https://huggingface.co/Perfs/blendrole/resolve/main/RoleScene_Blend_QwenEdit_%E8%A7%92%E8%89%B2%E8%9E%8D%E6%99%AF_V1.0.safetensors | loras | RoleScene_Blend.safetensors
+
+# ---- SeedVR2 upscaler (models/SEEDVR2, uppercase) ----
+https://huggingface.co/numz/SeedVR2_comfyUI/resolve/main/seedvr2_ema_3b_fp8_e4m3fn.safetensors | SEEDVR2 | seedvr2_ema_3b_fp8_e4m3fn.safetensors
+https://huggingface.co/numz/SeedVR2_comfyUI/resolve/main/ema_vae_fp16.safetensors | SEEDVR2 | ema_vae_fp16.safetensors

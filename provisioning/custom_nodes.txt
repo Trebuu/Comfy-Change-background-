@@ -1,0 +1,15 @@
+# Custom-node packs for the Change-background workflow only.
+# format:  <git-repo-url> | <commit-or-tag>   (blank commit = latest)
+
+# --- validated locally, pinned to known-good commits ---
+https://github.com/chflame163/ComfyUI_LayerStyle          | d94bef1ee5ed3656f5ff1bb2830a4ffd94f40935
+https://github.com/chflame163/ComfyUI_LayerStyle_Advance  | 7b678b401a38307a4a7e99ef6630bd48f9cecedb
+https://github.com/kijai/ComfyUI-KJNodes                  | e27a505b3ba6ce42687fe00500deda103d9d6071
+https://github.com/Fannovel16/comfyui_controlnet_aux      | e8b689a513c3e6b63edc44066560ca5919c0576e
+https://github.com/cubiq/ComfyUI_essentials               | 9d9f4bedfc9f0321c19faf71855e228c93bd0dc9
+https://github.com/lrzjason/Comfyui-QwenEditUtils         | cdd4d028c6491d27a40092d7795158668cec9189
+
+# --- required, clone latest (target ver in comment) ---
+https://github.com/TTPlanetPig/Comfyui_TTP_Toolset        |   # TTP_Image_Tile_Batch / Assy (built 1.0.5)
+https://github.com/numz/ComfyUI-SeedVR2_VideoUpscaler     |   # SeedVR2* upscaler (built 2.5.10)
+https://github.com/KookYn9404/KOOK_ImageCompression       |   # KOOK_ImageCompression

@@ -1,0 +1,5 @@
+ComfyUI/
+models/
+*.safetensors
+*.gguf
+__pycache__/
