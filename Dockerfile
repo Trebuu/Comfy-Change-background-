@@ -36,7 +36,7 @@ RUN sed -i 's#from_pretrained(model_path, trust_remote_code=True)#from_pretraine
 
 # 6) worker
 RUN pip install --no-cache-dir runpod
-COPY serverless/handler.py /handler.py
+COPY handler.py /handler.py
 COPY serverless/start.sh /start.sh
 RUN chmod +x /start.sh
 
