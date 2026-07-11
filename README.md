@@ -57,20 +57,23 @@ themselves the first time the graph runs.
 
 ## Local UI (`ui/app.py`)
 
-A tiny web app to drive the serverless endpoint without touching curl. It keeps your
-RunPod key **server-side** (never in the browser) and shows live progress.
+A tiny web app for the **RunComfy** deployment (One-click Pose Generator). It keeps your
+token **server-side** (never in the browser) and shows live progress.
 
 ```bash
 pip install flask requests
-export RUNPOD_API_KEY=rpa_xxx                 # your RunPod key
-export RUNPOD_ENDPOINT_ID=rbar685y8idpqk      # the Change-background endpoint
+export RUNCOMFY_TOKEN=your_token              # your RunComfy API token
+# deployment id defaults to f9c1e1f5-...; override node ids if your graph differs:
+# export IMAGE_NODE=15  COUNT_NODE=21  SEED_NODE=8
 python ui/app.py                              # -> http://localhost:5000
 ```
 
-Open the page, drop in **image 1 (person)** and **image 2 (scene)**, optionally edit the
-instruction, and click **Generate**. It uploads the images, runs the API-format workflow,
-polls until done, and shows/download the result. First run after idle takes a few minutes
-(cold model load); warm runs are faster.
+Open the page, drop in **one character image**, set the **number of poses**, optionally a
+**seed**, and click **Generate**. It overrides node 15 (image) / 21 (count) / 8 (seed),
+polls until done, and shows the generated poses. First run after idle takes a few minutes.
+
+> After editing the file you must **restart** `python ui/app.py` (Flask doesn't hot-reload)
+> and hard-refresh the browser.
 
 ## Note
 The RoleScene Blend LoRA (Chinese name `角色置景_RoleScene Blend`) is referenced inside
