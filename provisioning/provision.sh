@@ -103,4 +103,32 @@ if [[ "${SKIP_MODELS:-0}" != "1" && -f "$MODELS_LIST" ]]; then
   done < "$MODELS_LIST"
 fi
 
+# ---- 3. workflow-specific fixes (validated on RunPod; needed for this graph) ----
+if [[ "${SKIP_FIXES:-0}" != "1" && -d "$COMFYUI_DIR/custom_nodes/ComfyUI_LayerStyle_Advance" ]]; then
+  echo ">> Applying Change-background fixes..."
+  # (a) BiRefNet-General model — LoadBiRefNetModelV2 expects it pre-placed, else it errors
+  BIREF="$MODELS_ROOT/BiRefNet/BiRefNet-General"
+  if [[ ! -f "$BIREF/model.safetensors" ]]; then
+    echo "   [get ] BiRefNet-General"
+    $PY - "$BIREF" "${HF_TOKEN:-}" <<'PYB' || echo "   !! BiRefNet download failed"
+import sys
+from huggingface_hub import snapshot_download
+snapshot_download(repo_id="ZhengPeng7/BiRefNet", local_dir=sys.argv[1],
+                  ignore_patterns=["*.md","*.txt",".gitattributes"],
+                  token=(sys.argv[2] or None))
+PYB
+  else echo "   [skip] BiRefNet-General (exists)"; fi
+  # (b) load BiRefNet in fp32 (the model is fp16; input is fp32 -> dtype mismatch)
+  BF="$COMFYUI_DIR/custom_nodes/ComfyUI_LayerStyle_Advance/py/birefnet_ultra_v2.py"
+  if [[ -f "$BF" ]] && ! grep -q "trust_remote_code=True).float()" "$BF"; then
+    sed -i 's#from_pretrained(model_path, trust_remote_code=True)#from_pretrained(model_path, trust_remote_code=True).float()#' "$BF" && echo "   [fix ] BiRefNet fp32"
+  fi
+  # (c) opencv guidedFilter for LayerStyle
+  if ! $PY -c "from cv2.ximgproc import guidedFilter" 2>/dev/null; then
+    echo "   [fix ] opencv-contrib (guidedFilter)"
+    pip uninstall -y opencv-python opencv-python-headless opencv-contrib-python opencv-contrib-python-headless >/dev/null 2>&1 || true
+    pip install -q opencv-contrib-python-headless || true
+  fi
+fi
+
 echo ">> Provisioning complete."
